@@ -85,8 +85,10 @@ def plot_importance(imp: dict, path: Path, top_k: int = 15) -> None:
 
 
 def save_model_b64(obj, path: Path) -> None:
-    raw = joblib.dumps(obj)
-    path.write_text(base64.b64encode(raw).decode("ascii"))
+    import io
+    buf = io.BytesIO()
+    joblib.dump(obj, buf)
+    path.write_text(base64.b64encode(buf.getvalue()).decode("ascii"))
 
 
 def main() -> None:
