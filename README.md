@@ -30,10 +30,21 @@ A small committed sample lives in `data/sample/` so the app/notebooks work offli
 6. **Explainability:** LightGBM gain / Ridge |coef| feature importance charts.
 
 ## Results
+## Results (item_1, trained locally)
 
-After `python scripts/train.py`, see `reports/metrics.json` and `reports/figures/*.svg`.
+Expanding-window backtest (horizon 28, 26 folds):
 
-> Metrics are produced by the training script (not hand-written). Re-run train locally to refresh numbers after changing models.
+| Model | MAE | RMSE | MAPE |
+|-------|-----|------|------|
+| **Ridge (best)** | **1.44** | **2.13** | **6.37%** |
+| Seasonal naive | 1.52 | 2.43 | 6.62% |
+| LightGBM | 1.52 | 2.29 | 6.85% |
+| Naive | 3.09 | 3.82 | 13.24% |
+
+Holdout (last 90 days): Ridge **MAE 1.08**, **MAPE 5.76%** — beats seasonal naive (MAE 1.23).
+
+Top drivers: lag_1, lag_2, is_weekend, roll_mean_7, month.
+> Full numbers in `reports/metrics.json`. Re-run `python scripts/train.py` to refresh.
 
 ## Project layout
 
