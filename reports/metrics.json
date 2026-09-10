@@ -1,13 +1,117 @@
 {
-  "status": "pending_local_train",
-  "message": "Run: python scripts/download_data.py && python scripts/train.py --series item_1",
-  "expected_outputs": [
-    "reports/metrics.json (this file overwritten with real backtest/holdout numbers)",
-    "reports/figures/*.svg",
-    "models/best_model.joblib and models/*.joblib.b64"
-  ],
-  "dataset": {
-    "name": "skforecast simulated_items_sales",
-    "url": "https://raw.githubusercontent.com/skforecast/skforecast-datasets/main/data/simulated_items_sales.csv"
+  "series": "item_1",
+  "n_obs": 1097,
+  "start": "2012-01-01",
+  "end": "2015-01-01",
+  "best_model": "ridge",
+  "backtest": {
+    "horizon": 28,
+    "min_train": 365,
+    "step": 28,
+    "leaderboard": [
+      {
+        "model": "ridge",
+        "mae": 1.4351,
+        "rmse": 2.1336,
+        "mape": 6.374,
+        "smape": 6.421,
+        "n": 728,
+        "folds": 26,
+        "horizon": 28
+      },
+      {
+        "model": "seasonal_naive",
+        "mae": 1.5185,
+        "rmse": 2.4258,
+        "mape": 6.6175,
+        "smape": 6.8061,
+        "n": 728,
+        "folds": 26,
+        "horizon": 28
+      },
+      {
+        "model": "lightgbm",
+        "mae": 1.5189,
+        "rmse": 2.293,
+        "mape": 6.8523,
+        "smape": 6.7457,
+        "n": 728,
+        "folds": 26,
+        "horizon": 28
+      },
+      {
+        "model": "naive",
+        "mae": 3.0947,
+        "rmse": 3.8162,
+        "mape": 13.2439,
+        "smape": 14.5616,
+        "n": 728,
+        "folds": 26,
+        "horizon": 28
+      }
+    ]
+  },
+  "holdout": {
+    "test_size": 90,
+    "results": {
+      "naive": {
+        "mae": 1.737,
+        "rmse": 2.4415,
+        "mape": 9.4841,
+        "smape": 8.5002,
+        "n": 90
+      },
+      "seasonal_naive": {
+        "mae": 1.2295,
+        "rmse": 1.9827,
+        "mape": 6.6567,
+        "smape": 6.1458,
+        "n": 90
+      },
+      "ridge": {
+        "mae": 1.08,
+        "rmse": 1.669,
+        "mape": 5.7581,
+        "smape": 5.3898,
+        "n": 90
+      },
+      "lightgbm": {
+        "mae": 1.6452,
+        "rmse": 2.7464,
+        "mape": 9.0083,
+        "smape": 7.7768,
+        "n": 90
+      }
+    }
+  },
+  "feature_importance_best": {
+    "lag_1": 2.0066971116570436,
+    "lag_2": 0.8460433294157778,
+    "is_weekend": 0.5548140377738825,
+    "roll_mean_7": 0.4452793548147043,
+    "month": 0.4417000444717184,
+    "lag_3": 0.4016753156991173,
+    "dow": 0.3532987175018921,
+    "roll_mean_28": 0.31777586683540165,
+    "roll_std_7": 0.27572623430868937,
+    "weekofyear": 0.24623281103318365,
+    "roll_min_14": 0.23770820293333988,
+    "roll_min_28": 0.2101374082328171,
+    "roll_std_14": 0.2017561533803705,
+    "roll_max_14": 0.1887316058793064,
+    "lag_28": 0.17395214603762424,
+    "roll_std_28": 0.17118759696343772,
+    "lag_14": 0.16022479129079067,
+    "lag_7": 0.1421544136773942,
+    "roll_max_7": 0.11997034996405381,
+    "month_sin": 0.11842199992771317,
+    "roll_min_7": 0.11703354272354523,
+    "dow_sin": 0.08694904848023681,
+    "month_cos": 0.08596178119513889,
+    "lag_21": 0.08041634743601002,
+    "roll_mean_14": 0.07350587775712568,
+    "dow_cos": 0.06494456389392493,
+    "roll_max_28": 0.04963996017987732,
+    "dom": 0.004722980220704758
   }
 }
