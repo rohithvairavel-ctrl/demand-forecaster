@@ -10,8 +10,8 @@ from sklearn.linear_model import Ridge
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import StandardScaler
 
-from .config import RANDOM_STATE, SEASONAL_PERIOD
-from .features import feature_columns, make_supervised, xy_split
+from .config import LAGS, RANDOM_STATE, ROLLING_WINDOWS, SEASONAL_PERIOD
+from .features import add_calendar_features, feature_columns, make_supervised, xy_split
 
 try:
     import lightgbm as lgb
@@ -35,12 +35,11 @@ class NaiveForecaster:
 
     name: str = "naive"
     _last: float | None = field(default=None, init=False, repr=False)
-    _index_freq: str = field(default="D", init=False, repr=False)
     _last_date: pd.Timestamp | None = field(default=None, init=False, repr=False)
 
     def fit(self, y: pd.Series) -> "NaiveForecaster":
         self._last = float(y.iloc[-1])
-        self._last_date = y.index[-1]
+        self._last_date = pd.Timestamp(y.index[-1])
         return self
 
     def predict(self, horizon: int) -> pd.Series:
@@ -64,12 +63,30 @@ class SeasonalNaiveForecaster:
 
     def predict(self, horizon: int) -> pd.Series:
         y = self._history
-        last_date = y.index[-1]
+        last_date = pd.Timestamp(y.index[-1])
         vals = []
         for h in range(1, horizon + 1):
             vals.append(float(y.iloc[-self.season + ((h - 1) % self.season)]))
         idx = pd.date_range(last_date + pd.Timedelta(days=1), periods=horizon, freq="D")
         return pd.Series(vals, index=idx, name=self.name)
+
+
+def _feature_row_from_history(hist: list[float], idx_hist: list[pd.Timestamp], next_date: pd.Timestamp) -> pd.DataFrame:
+    """Build a single feature row for next_date using only past values (no leakage)."""
+    s = pd.Series(hist, index=pd.DatetimeIndex(idx_hist), dtype=float)
+    row: dict[str, float] = {}
+    for lag in LAGS:
+        row[f"lag_{lag}"] = float(s.iloc[-lag]) if len(s) >= lag else float("nan")
+    for w in ROLLING_WINDOWS:
+        window = s.iloc[-w:] if len(s) >= w else s
+        row[f"roll_mean_{w}"] = float(window.mean())
+        row[f"roll_std_{w}"] = float(window.std(ddof=0)) if len(window) > 1 else 0.0
+        row[f"roll_min_{w}"] = float(window.min())
+        row[f"roll_max_{w}"] = float(window.max())
+    cal = add_calendar_features(pd.DatetimeIndex([next_date])).iloc[0]
+    for k, v in cal.items():
+        row[str(k)] = float(v)
+    return pd.DataFrame([row], index=[next_date])
 
 
 @dataclass
@@ -80,11 +97,13 @@ class TabularForecaster:
     name: str = "tabular"
     _y: pd.Series | None = field(default=None, init=False, repr=False)
     _fitted: Any = field(default=None, init=False, repr=False)
+    _feature_names: list[str] = field(default_factory=list, init=False, repr=False)
     feature_importances_: dict[str, float] | None = field(default=None, init=False)
 
     def fit(self, y: pd.Series) -> "TabularForecaster":
         frame = make_supervised(y)
         X, target = xy_split(frame)
+        self._feature_names = list(X.columns)
         self._fitted = self.model.fit(X, target)
         self._y = y.astype(float).copy()
         self._capture_importance(X.columns)
@@ -107,21 +126,12 @@ class TabularForecaster:
 
     def predict(self, horizon: int) -> pd.Series:
         hist = list(self._y.astype(float).values)
-        idx_hist = list(self._y.index)
-        preds = []
+        idx_hist = [pd.Timestamp(t) for t in self._y.index]
+        preds: list[float] = []
         for _ in range(horizon):
             next_date = idx_hist[-1] + pd.Timedelta(days=1)
-            series = pd.Series(hist, index=pd.DatetimeIndex(idx_hist), dtype=float)
-            # extend with NaN placeholder so make_supervised can build row for next_date
-            series.loc[next_date] = np.nan
-            frame = make_supervised(series.ffill())
-            # last row corresponds to next_date after ffill — use features only
-            if next_date not in frame.index:
-                # fallback: use last available feature row pattern with updated calendar
-                row = frame.iloc[[-1]].copy()
-            else:
-                row = frame.loc[[next_date]]
-            X = row[feature_columns(frame)]
+            X = _feature_row_from_history(hist, idx_hist, next_date)
+            X = X.reindex(columns=self._feature_names)
             yhat = float(self._fitted.predict(X)[0])
             preds.append(yhat)
             hist.append(yhat)
@@ -134,7 +144,7 @@ def make_ridge(alpha: float = 1.0) -> TabularForecaster:
     pipe = Pipeline(
         [
             ("scaler", StandardScaler()),
-            ("model", Ridge(alpha=alpha, random_state=RANDOM_STATE)),
+            ("model", Ridge(alpha=alpha)),
         ]
     )
     return TabularForecaster(model=pipe, name="ridge")
