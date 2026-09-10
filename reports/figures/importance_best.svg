@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="560" height="340">
+<text x="280.0" y="24" text-anchor="middle" font-size="14" font-family="sans-serif">Feature importance / |coef| (top drivers)</text>
+<rect x="140" y="40" width="380.0" height="16" fill="#72B7B2"/>
+<text x="134" y="52" text-anchor="end" font-size="11" font-family="sans-serif">lag_1</text>
+<text x="524.0" y="52" font-size="10" font-family="sans-serif">2.007</text>
+<rect x="140" y="64" width="160.2" height="16" fill="#72B7B2"/>
+<text x="134" y="76" text-anchor="end" font-size="11" font-family="sans-serif">lag_2</text>
+<text x="304.21175458438654" y="76" font-size="10" font-family="sans-serif">0.846</text>
+<rect x="140" y="88" width="105.1" height="16" fill="#72B7B2"/>
+<text x="134" y="100" text-anchor="end" font-size="11" font-family="sans-serif">is_weekend</text>
+<text x="249.0628583304142" y="100" font-size="10" font-family="sans-serif">0.555</text>
+<rect x="140" y="112" width="84.3" height="16" fill="#72B7B2"/>
+<text x="134" y="124" text-anchor="end" font-size="11" font-family="sans-serif">roll_mean_7</text>
+<text x="228.32072476043209" y="124" font-size="10" font-family="sans-serif">0.445</text>
+<rect x="140" y="136" width="83.6" height="16" fill="#72B7B2"/>
+<text x="134" y="148" text-anchor="end" font-size="11" font-family="sans-serif">month</text>
+<text x="227.64292544411597" y="148" font-size="10" font-family="sans-serif">0.442</text>
+<rect x="140" y="160" width="76.1" height="16" fill="#72B7B2"/>
+<text x="134" y="172" text-anchor="end" font-size="11" font-family="sans-serif">lag_3</text>
+<text x="220.06360674911417" y="172" font-size="10" font-family="sans-serif">0.402</text>
+<rect x="140" y="184" width="66.9" height="16" fill="#72B7B2"/>
+<text x="134" y="196" text-anchor="end" font-size="11" font-family="sans-serif">dow</text>
+<text x="210.9027288028826" y="196" font-size="10" font-family="sans-serif">0.353</text>
+<rect x="140" y="208" width="60.2" height="16" fill="#72B7B2"/>
+<text x="134" y="220" text-anchor="end" font-size="11" font-family="sans-serif">roll_mean_28</text>
+<text x="204.17591229686803" y="220" font-size="10" font-family="sans-serif">0.318</text>
+<rect x="140" y="232" width="52.2" height="16" fill="#72B7B2"/>
+<text x="134" y="244" text-anchor="end" font-size="11" font-family="sans-serif">roll_std_7</text>
+<text x="196.2131458846734" y="244" font-size="10" font-family="sans-serif">0.276</text>
+<rect x="140" y="256" width="46.6" height="16" fill="#72B7B2"/>
+<text x="134" y="268" text-anchor="end" font-size="11" font-family="sans-serif">weekofyear</text>
+<text x="190.628097309287" y="268" font-size="10" font-family="sans-serif">0.246</text>
+<rect x="140" y="280" width="45.0" height="16" fill="#72B7B2"/>
+<text x="134" y="292" text-anchor="end" font-size="11" font-family="sans-serif">roll_min_14</text>
+<text x="189.01382724375344" y="292" font-size="10" font-family="sans-serif">0.238</text>
+<rect x="140" y="304" width="39.8" height="16" fill="#72B7B2"/>
+<text x="134" y="316" text-anchor="end" font-size="11" font-family="sans-serif">roll_min_28</text>
+<text x="183.7928589544498" y="316" font-size="10" font-family="sans-serif">0.210</text>
+</svg>

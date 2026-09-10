@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="320">
+<text x="320.0" y="24" text-anchor="middle" font-size="16" font-family="sans-serif">Expanding-window backtest MAE by model</text>
+<text x="20" y="160.0" transform="rotate(-90 20 160.0)" font-size="12" font-family="sans-serif">MAE (lower better)</text>
+<rect x="80" y="40.0" width="100" height="220.0" fill="#4C78A8"/>
+<text x="130.0" y="278" text-anchor="middle" font-size="11" font-family="sans-serif">naive</text>
+<text x="130.0" y="34.0" text-anchor="middle" font-size="11" font-family="sans-serif">3.09</text>
+<rect x="220" y="152.1" width="100" height="107.9" fill="#4C78A8"/>
+<text x="270.0" y="278" text-anchor="middle" font-size="11" font-family="sans-serif">seasonal_naive</text>
+<text x="270.0" y="146.0509257763273" text-anchor="middle" font-size="11" font-family="sans-serif">1.52</text>
+<rect x="360" y="158.0" width="100" height="102.0" fill="#54A24B"/>
+<text x="410.0" y="278" text-anchor="middle" font-size="11" font-family="sans-serif">ridge</text>
+<text x="410.0" y="151.97977186803246" text-anchor="middle" font-size="11" font-family="sans-serif">1.44</text>
+<rect x="500" y="152.0" width="100" height="108.0" fill="#4C78A8"/>
+<text x="550.0" y="278" text-anchor="middle" font-size="11" font-family="sans-serif">lightgbm</text>
+<text x="550.0" y="146.02249006365722" text-anchor="middle" font-size="11" font-family="sans-serif">1.52</text>
+</svg>
